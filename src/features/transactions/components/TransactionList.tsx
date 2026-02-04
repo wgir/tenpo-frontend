@@ -1,14 +1,25 @@
 import React from 'react';
-import { CreditCard, ArrowUpRight } from 'lucide-react';
+import { CreditCard, Edit2, Trash2 } from 'lucide-react';
 import type { Transaction } from '../types/transaction.types';
 import { formatDate, formatCurrency } from '../../../utils/date';
+import { Select } from '../../../components/ui/Select';
+import { useClients } from '../../clients/hooks/useClients';
+import { Button } from '../../../components/ui/Button';
 
 interface TransactionListProps {
     transactions: Transaction[];
+    onEdit: (transaction: Transaction) => void;
+    onDelete: (id: number) => void;
     isLoading?: boolean;
 }
 
-export const TransactionList: React.FC<TransactionListProps> = ({ transactions, isLoading }) => {
+export const TransactionList: React.FC<TransactionListProps> = ({ transactions, onEdit, onDelete, isLoading }) => {
+    const { clients, isLoading: isLoadingClients } = useClients();
+    const clientOptions = clients.map(c => ({
+        value: c.id,
+        label: c.name
+    }));
+
     if (isLoading) {
         return (
             <div className="space-y-4">
@@ -31,36 +42,72 @@ export const TransactionList: React.FC<TransactionListProps> = ({ transactions, 
 
     return (
         <div className="space-y-3">
-            {transactions.map((transaction) => (
-                <div
-                    key={transaction.id}
-                    className="flex items-center justify-between p-4 bg-white rounded-xl border border-slate-200 hover:border-primary-200 hover:shadow-md transition-all group"
-                >
-                    <div className="flex items-center space-x-4">
-                        <div className="h-10 w-10 bg-primary-50 text-primary-600 rounded-full flex items-center justify-center shrink-0">
-                            <ArrowUpRight size={20} />
-                        </div>
-                        <div className="min-w-0">
-                            <h4 className="font-semibold text-slate-900 truncate">
-                                {transaction.merchant_or_business}
-                            </h4>
-                            <p className="text-xs text-slate-500 flex items-center space-x-2">
-                                <span>{transaction.employee_name}</span>
-                                <span className="h-1 w-1 bg-slate-300 rounded-full" />
-                                <span>{transaction.client_name}</span>
-                            </p>
-                        </div>
-                    </div>
-                    <div className="text-right shrink-0">
-                        <p className="font-bold text-slate-900">
-                            {formatCurrency(transaction.amount)}
-                        </p>
-                        <p className="text-[10px] text-slate-400 font-medium uppercase tracking-wider">
-                            {formatDate(transaction.date)}
-                        </p>
-                    </div>
+            {/* Simple Filters */}
+            <div className="flex items-center space-x-2 mb-4">
+                <div className="relative flex-1 max-w-sm">
+                    <Select
+                        label="Cliente"
+                        options={clientOptions}
+                        disabled={isLoadingClients}
+                    />
                 </div>
-            ))}
+
+            </div>
+            <table className="w-full text-left border-collapse">
+                <thead>
+                    <tr className="border-b border-slate-100 text-slate-500 text-sm">
+                        <th className="pb-4 font-medium">Cliente</th>
+                        <th className="pb-4 font-medium">Empleado</th>
+                        <th className="pb-4 font-medium">Negocio</th>
+                        <th className="pb-4 font-medium">Fecha</th>
+                        <th className="pb-4 font-medium">Monto</th>
+                        <th className="pb-4 font-medium text-right">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                    {transactions.map((transaction) => (
+                        <tr key={transaction.id} className="group hover:bg-slate-50/50 transition-colors">
+                            <td className="py-4">
+                                <div className="flex items-center space-x-3">
+                                    <div className="h-8 w-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center font-bold text-xs">
+                                        {(transaction.client_name || '?').charAt(0).toUpperCase()}
+                                    </div>
+                                    <span className="font-medium text-slate-900">{transaction.client_name || 'Sin nombre'}</span>
+                                </div>
+                            </td>
+                            <td className="py-4 text-slate-600">{transaction.employee_name}</td>
+                            <td className="py-4">
+                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-800">
+                                    {transaction.merchant_or_business}
+                                </span>
+                            </td>
+                            <td className="py-4 text-slate-600">{formatDate(transaction.date)}</td>
+                            <td className="py-4 text-right">{formatCurrency(transaction.amount)}</td>
+                            <td className="py-4 text-right">
+                                <div className="flex items-center justify-end space-x-1">
+                                    <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        onClick={() => onEdit(transaction)}
+                                        className="h-8 w-8 text-slate-400 hover:text-primary-600"
+                                    >
+                                        <Edit2 size={16} />
+                                    </Button>
+                                    <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        onClick={() => onDelete(transaction.id)}
+                                        className="h-8 w-8 text-slate-400 hover:text-red-600"
+                                    >
+                                        <Trash2 size={16} />
+                                    </Button>
+                                </div>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
         </div>
+
     );
 };

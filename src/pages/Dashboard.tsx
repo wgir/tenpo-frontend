@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { MainLayout } from '../layouts/MainLayout';
 import { Button } from '../components/ui/Button';
 import { Modal } from '../components/ui/Modal';
-import { Plus, Search, Filter } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import { TransactionList } from '../features/transactions/components/TransactionList';
 import { TransactionForm } from '../features/transactions/components/TransactionForm';
 import { ClientList } from '../features/clients/components/ClientList';
@@ -18,7 +18,7 @@ export const Dashboard: React.FC = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingItem, setEditingItem] = useState<any>(null);
 
-    const { transactions, isLoading: isLoadingTransactions, createTransaction } = useTransactions();
+    const { transactions, isLoading: isLoadingTransactions, createTransaction, updateTransaction, deleteTransaction, } = useTransactions();
     const { clients, isLoading: isLoadingClients, createClient, updateClient, deleteClient } = useClients();
     const { employees, isLoading: isLoadingEmployees, createEmployee, updateEmployee, deleteEmployee } = useEmployees();
 
@@ -53,23 +53,13 @@ export const Dashboard: React.FC = () => {
 
             {/* Main Content Area */}
             <div className="space-y-6">
-                {/* Simple Filters */}
-                <div className="flex items-center space-x-2 mb-4">
-                    <div className="relative flex-1 max-w-sm">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
-                        <input
-                            type="text"
-                            placeholder="Buscar..."
-                            className="w-full pl-10 pr-4 py-2 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
-                        />
-                    </div>
-                    <Button variant="outline" size="icon">
-                        <Filter size={18} />
-                    </Button>
-                </div>
+
 
                 {activeSection === 'transactions' && (
-                    <TransactionList transactions={transactions} isLoading={isLoadingTransactions} />
+                    <TransactionList transactions={transactions}
+                        onEdit={(transaction) => { setEditingItem(transaction); setIsModalOpen(true); }}
+                        onDelete={deleteTransaction}
+                        isLoading={isLoadingTransactions} />
                 )}
 
                 {activeSection === 'clients' && (
@@ -100,8 +90,13 @@ export const Dashboard: React.FC = () => {
             >
                 {activeSection === 'transactions' && (
                     <TransactionForm
+                        initialValues={editingItem}
                         onSubmit={async (values) => {
-                            await createTransaction(values);
+                            if (editingItem) {
+                                await updateTransaction({ id: editingItem.id, data: values });
+                            } else {
+                                await createTransaction(values);
+                            }
                             setIsModalOpen(false);
                         }}
                     />

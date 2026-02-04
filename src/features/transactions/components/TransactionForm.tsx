@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Plus } from 'lucide-react';
@@ -14,10 +14,11 @@ import { EmployeeForm } from '../../employees/components/EmployeeForm';
 
 interface TransactionFormProps {
     onSubmit: (values: TransactionFormValues) => Promise<void>;
+    initialValues?: Partial<TransactionFormValues>;
     isLoading?: boolean;
 }
 
-export const TransactionForm: React.FC<TransactionFormProps> = ({ onSubmit, isLoading }) => {
+export const TransactionForm: React.FC<TransactionFormProps> = ({ onSubmit, initialValues, isLoading }) => {
     const { clients, createClient } = useClients();
     const { employees, createEmployee } = useEmployees();
 
@@ -29,20 +30,35 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSubmit, isLo
         handleSubmit,
         setValue,
         watch,
+        reset,
         formState: { errors },
     } = useForm<TransactionFormValues>({
         resolver: zodResolver(transactionSchema),
         defaultValues: {
-            transaction_date: new Date().toISOString().slice(0, 16),
+            ...initialValues,
+            date: initialValues?.date
+                ? new Date(initialValues.date).toISOString().slice(0, 16)
+                : new Date().toISOString().slice(0, 16),
         },
     });
+
+    useEffect(() => {
+        if (initialValues) {
+            reset({
+                ...initialValues,
+                date: initialValues.date
+                    ? new Date(initialValues.date).toISOString().slice(0, 16)
+                    : new Date().toISOString().slice(0, 16),
+            });
+        }
+    }, [initialValues, reset]);
 
     const selectedClientId = watch('client_id');
 
     const filteredEmployees = employees.filter(e => e.client_id === selectedClientId);
 
-    const clientOptions = clients.map(c => ({ value: c.id, label: c.client_name }));
-    const employeeOptions = filteredEmployees.map(e => ({ value: e.id, label: e.employee_name }));
+    const clientOptions = clients.map(c => ({ value: c.id, label: c.name }));
+    const employeeOptions = filteredEmployees.map(e => ({ value: e.id, label: e.name }));
 
     return (
         <div className="space-y-6">
@@ -52,14 +68,14 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSubmit, isLo
                         type="number"
                         label="Monto (CLP)"
                         placeholder="0"
-                        error={errors.transaction_amount?.message}
-                        {...register('transaction_amount', { valueAsNumber: true })}
+                        error={errors.amount?.message}
+                        {...register('amount', { valueAsNumber: true })}
                     />
                     <Input
                         type="datetime-local"
                         label="Fecha y Hora"
-                        error={errors.transaction_date?.message}
-                        {...register('transaction_date')}
+                        error={errors.date?.message}
+                        {...register('date')}
                     />
                 </div>
 
