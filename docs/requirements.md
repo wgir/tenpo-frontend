@@ -1,5 +1,5 @@
 ## 1. Objetivo
-Diseñar y desarrollar una app web con react y nextjs,siguiendo las mejores prácticas de
+Diseñar y desarrollar una app web con react y vite,siguiendo las mejores prácticas de
 desarrollo de software. El objetivo es evaluar habilidades técnicas para implementar una solución escalable,bien documentada y mantenible.
 
 ## 2. Context
