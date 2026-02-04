@@ -92,6 +92,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSubmit, init
                             <Select
                                 label="Cliente"
                                 options={clientOptions}
+                                placeholder="Seleccione un cliente"
                                 error={errors.client_id?.message}
                                 {...register('client_id', { valueAsNumber: true })}
                             />
@@ -112,6 +113,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSubmit, init
                             <Select
                                 label="Empleado"
                                 options={employeeOptions}
+                                placeholder="Seleccione un empleado"
                                 error={errors.employee_id?.message}
                                 disabled={!selectedClientId}
                                 {...register('employee_id', { valueAsNumber: true })}

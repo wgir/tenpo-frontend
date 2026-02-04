@@ -2,12 +2,12 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { transactionsApi } from '../api/transactions.api';
 import type { UpdateTransactionDTO } from '../types/transaction.types';
 
-export const useTransactions = () => {
+export const useTransactions = (clientId?: number) => {
     const queryClient = useQueryClient();
 
     const transactionsQuery = useQuery({
-        queryKey: ['transactions'],
-        queryFn: transactionsApi.getAll,
+        queryKey: ['transactions', clientId],
+        queryFn: () => clientId ? transactionsApi.getByClientId(clientId) : transactionsApi.getAll(),
     });
 
     const createTransactionMutation = useMutation({

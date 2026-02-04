@@ -21,4 +21,8 @@ export const transactionsApi = {
     delete: async (id: number): Promise<void> => {
         await axiosInstance.delete(`/transaction/${id}`);
     },
+    getByClientId: async (clientId: number): Promise<Transaction[]> => {
+        const { data } = await axiosInstance.get(`/transaction/client/${clientId}`);
+        return data;
+    },
 };

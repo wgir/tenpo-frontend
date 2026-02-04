@@ -4,8 +4,7 @@ import {
     Users,
     UserCircle,
     Menu,
-    Bell,
-    LogOut
+    Bell
 } from 'lucide-react';
 import { cn } from '../components/ui/Button';
 

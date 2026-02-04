@@ -11,6 +11,12 @@ interface EmployeeListProps {
 }
 
 export const EmployeeList: React.FC<EmployeeListProps> = ({ employees, onEdit, onDelete, isLoading }) => {
+    const handleDelete = (id: number) => {
+        if (window.confirm('¿Está seguro de eliminar el registro?')) {
+            onDelete(id);
+        }
+    };
+
     if (isLoading) {
         return (
             <div className="space-y-4">
@@ -72,7 +78,7 @@ export const EmployeeList: React.FC<EmployeeListProps> = ({ employees, onEdit, o
                                     <Button
                                         variant="ghost"
                                         size="icon"
-                                        onClick={() => onDelete(employee.id)}
+                                        onClick={() => handleDelete(employee.id)}
                                         className="h-8 w-8 text-slate-400 hover:text-red-600"
                                     >
                                         <Trash2 size={16} />
