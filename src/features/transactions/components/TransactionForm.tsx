@@ -63,29 +63,6 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSubmit, init
     return (
         <div className="space-y-6">
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <Input
-                        type="number"
-                        label="Monto (CLP)"
-                        placeholder="0"
-                        error={errors.amount?.message}
-                        {...register('amount', { valueAsNumber: true })}
-                    />
-                    <Input
-                        type="datetime-local"
-                        label="Fecha y Hora"
-                        error={errors.date?.message}
-                        {...register('date')}
-                    />
-                </div>
-
-                <Input
-                    label="Comercio / Glosa"
-                    placeholder="Ej: Starbuck Plaza Italia"
-                    error={errors.merchant_or_business?.message}
-                    {...register('merchant_or_business')}
-                />
-
                 <div className="space-y-4">
                     <div className="flex items-end space-x-2">
                         <div className="flex-1">
@@ -131,6 +108,31 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSubmit, init
                         </Button>
                     </div>
                 </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <Input
+                        type="number"
+                        label="Monto (CLP)"
+                        placeholder="0"
+                        error={errors.amount?.message}
+                        {...register('amount', { valueAsNumber: true })}
+                    />
+                    <Input
+                        type="datetime-local"
+                        label="Fecha y Hora"
+                        error={errors.date?.message}
+                        {...register('date')}
+                    />
+                </div>
+
+                <Input
+                    label="Comercio / Glosa"
+                    placeholder="Ej: Starbuck Plaza Italia"
+                    error={errors.merchant_or_business?.message}
+                    {...register('merchant_or_business')}
+                />
+
+
 
                 <div className="pt-6">
                     <Button type="submit" isLoading={isLoading} className="w-full h-12 text-lg">

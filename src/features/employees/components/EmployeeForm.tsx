@@ -9,7 +9,7 @@ import { useClients } from '../../clients/hooks/useClients';
 
 interface EmployeeFormProps {
     onSubmit: (values: EmployeeFormValues) => Promise<void>;
-    initialValues?: Partial<EmployeeFormValues>;
+    initialValues?: Partial<EmployeeFormValues & { id: number }>;
     isLoading?: boolean;
 }
 
@@ -54,7 +54,7 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({ onSubmit, initialVal
             />
             <div className="flex justify-end space-x-3 pt-4">
                 <Button type="submit" isLoading={isLoading} className="w-full">
-                    {initialValues ? 'Actualizar Empleado' : 'Guardar Empleado'}
+                    {initialValues?.id ? 'Actualizar Empleado' : 'Guardar Empleado'}
                 </Button>
             </div>
         </form>

@@ -1,43 +1,27 @@
 import React, { useState } from 'react';
-import {
-    BarChart3,
-    Users,
-    UserCircle,
-    Menu,
-    Bell
-} from 'lucide-react';
+import { Menu, Bell } from 'lucide-react';
+import { Outlet, useLocation } from 'react-router-dom';
+import { Sidebar } from '../components/Sidebar';
 import { cn } from '../components/ui/Button';
 
-interface SidebarItemProps {
-    icon: React.ElementType;
-    label: string;
-    active?: boolean;
-    onClick: () => void;
-}
-
-const SidebarItem: React.FC<SidebarItemProps> = ({ icon: Icon, label, active, onClick }) => (
-    <button
-        onClick={onClick}
-        className={cn(
-            "flex w-full items-center space-x-3 rounded-lg px-4 py-3 transition-colors",
-            active
-                ? "bg-primary-50 text-primary-600 font-semibold"
-                : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
-        )}
-    >
-        <Icon size={20} />
-        <span>{label}</span>
-    </button>
-);
-
-interface MainLayoutProps {
-    children: React.ReactNode;
-    activeSection: 'transactions' | 'clients' | 'employees';
-    setActiveSection: (section: 'transactions' | 'clients' | 'employees') => void;
-}
-
-export const MainLayout: React.FC<MainLayoutProps> = ({ children, activeSection, setActiveSection }) => {
+export const MainLayout: React.FC = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const location = useLocation();
+
+    const getTitle = () => {
+        switch (location.pathname) {
+            case '/':
+                return "Resumen General";
+            case '/transactions':
+                return "Dashboard de Transacciones";
+            case '/clients':
+                return "Gestión de Clientes";
+            case '/employees':
+                return "Gestión de Empleados";
+            default:
+                return "Tenpo";
+        }
+    };
 
     return (
         <div className="min-h-screen bg-slate-50 flex">
@@ -54,37 +38,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children, activeSection,
                 "fixed inset-y-0 left-0 bg-white border-r border-slate-200 w-64 z-50 transform transition-transform lg:translate-x-0 lg:static lg:inset-0",
                 isSidebarOpen ? "translate-x-0" : "-translate-x-full"
             )}>
-                <div className="h-full flex flex-col p-6">
-                    <div className="flex items-center space-x-2 mb-10">
-                        <div className="h-8 w-8 bg-primary-600 rounded-lg flex items-center justify-center">
-                            <span className="text-white font-bold">T</span>
-                        </div>
-                        <span className="text-xl font-bold bg-gradient-to-r from-primary-600 to-primary-800 bg-clip-text text-transparent">
-                            Tenpo
-                        </span>
-                    </div>
-
-                    <nav className="flex-1 space-y-2">
-                        <SidebarItem
-                            icon={BarChart3}
-                            label="Transacciones"
-                            active={activeSection === 'transactions'}
-                            onClick={() => { setActiveSection('transactions'); setIsSidebarOpen(false); }}
-                        />
-                        <SidebarItem
-                            icon={Users}
-                            label="Clientes"
-                            active={activeSection === 'clients'}
-                            onClick={() => { setActiveSection('clients'); setIsSidebarOpen(false); }}
-                        />
-                        <SidebarItem
-                            icon={UserCircle}
-                            label="Empleados"
-                            active={activeSection === 'employees'}
-                            onClick={() => { setActiveSection('employees'); setIsSidebarOpen(false); }}
-                        />
-                    </nav>
-                </div>
+                <Sidebar onItemClick={() => setIsSidebarOpen(false)} />
             </aside>
 
             {/* Main Content */}
@@ -99,9 +53,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children, activeSection,
                             <Menu size={24} />
                         </button>
                         <h1 className="text-lg font-semibold text-slate-900">
-                            {activeSection === 'transactions' && "Dashboard de Transacciones"}
-                            {activeSection === 'clients' && "Gestión de Clientes"}
-                            {activeSection === 'employees' && "Gestión de Empleados"}
+                            {getTitle()}
                         </h1>
                     </div>
 
@@ -119,7 +71,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ children, activeSection,
                 {/* Content Area */}
                 <div className="flex-1 overflow-auto p-6 md:p-8">
                     <div className="max-w-7xl mx-auto">
-                        {children}
+                        <Outlet />
                     </div>
                 </div>
             </main>
