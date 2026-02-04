@@ -47,6 +47,7 @@ export const EmployeeForm: React.FC<EmployeeFormProps> = ({ onSubmit, initialVal
             <Select
                 label="Cliente"
                 options={clientOptions}
+                placeholder="Seleccione un cliente"
                 error={errors.client_id?.message}
                 disabled={isLoadingClients}
                 {...register('client_id', { valueAsNumber: true })}

@@ -17,8 +17,9 @@ export const Dashboard: React.FC = () => {
     const [activeSection, setActiveSection] = useState<'transactions' | 'clients' | 'employees'>('transactions');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingItem, setEditingItem] = useState<any>(null);
+    const [selectedClientId, setSelectedClientId] = useState<number | undefined>();
 
-    const { transactions, isLoading: isLoadingTransactions, createTransaction, updateTransaction, deleteTransaction, } = useTransactions();
+    const { transactions, isLoading: isLoadingTransactions, createTransaction, updateTransaction, deleteTransaction, } = useTransactions(selectedClientId);
     const { clients, isLoading: isLoadingClients, createClient, updateClient, deleteClient } = useClients();
     const { employees, isLoading: isLoadingEmployees, createEmployee, updateEmployee, deleteEmployee } = useEmployees();
 
@@ -56,10 +57,14 @@ export const Dashboard: React.FC = () => {
 
 
                 {activeSection === 'transactions' && (
-                    <TransactionList transactions={transactions}
+                    <TransactionList
+                        transactions={transactions}
+                        filterClientId={selectedClientId}
+                        onFilterChange={setSelectedClientId}
                         onEdit={(transaction) => { setEditingItem(transaction); setIsModalOpen(true); }}
                         onDelete={deleteTransaction}
-                        isLoading={isLoadingTransactions} />
+                        isLoading={isLoadingTransactions}
+                    />
                 )}
 
                 {activeSection === 'clients' && (
