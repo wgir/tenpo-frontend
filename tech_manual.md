@@ -64,6 +64,9 @@ La interacción más compleja ocurre en el módulo de **Transactions**:
 | **React Hook Form** | Manejo performante de formularios y validaciones complejas. |
 | **Zod** | Esquemas de validación de esquemas en tiempo de ejecución y tipado estático. |
 | **Lucide React** | Set de iconos consistente y ligero. |
+| **Vitest** | Framework de pruebas unitarias rápido y compatible con Vite. |
+| **Testing Library** | Utilidades para probar componentes desde la perspectiva del usuario. |
+| **MSW** | Mock Service Worker para interceptar y simular respuestas de API. |
 
 ---
 
@@ -72,6 +75,21 @@ La interacción más compleja ocurre en el módulo de **Transactions**:
 - **Tipado Estricto**: Se evitan los tipos `any`. Todos los DTOs e interfaces están definidos para prevenir errores en tiempo de desarrollo.
 - **Performance**: Uso intensivo de la caché de React Query para minimizar peticiones redundantes.
 - **Responsive Design**: Mobile-first usando las variantes de Tailwind (`sm:`, `md:`, `lg:`).
+
+---
+
+## 🧪 Estrategia de Pruebas (Testing)
+
+El proyecto cuenta con una infraestructura de pruebas automatizadas diseñada para asegurar la estabilidad a largo plazo.
+
+### Componentes de Testing:
+1.  **Unit Tests (Vitest)**: Pruebas de lógica pura en `utils/` y validaciones en `schemas/`.
+2.  **Component Tests (React Testing Library)**: Pruebas de comportamiento de UI, asegurando que los formularios y componentes reaccionen correctamente a las interacciones.
+3.  **Hooks / API Integration (MSW)**: Uso de **Mock Service Worker** para simular el backend. Esto permite probar los ganchos de `react-query` sin necesidad de un servidor real funcionando.
+
+### Comandos de Ejecución:
+- `npm test`: Inicia el corredor de pruebas en modo interactivo (watch).
+- `npm test -- --run`: Ejecuta las pruebas una sola vez (ideal para CI/CD).
 
 ---
 *Este manual es una guía viva para desarrolladores que deseen extender o mantener la plataforma Tenpo.*
