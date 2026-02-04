@@ -2,6 +2,8 @@ import React from 'react';
 import { CreditCard, ArrowUpRight } from 'lucide-react';
 import type { Transaction } from '../types/transaction.types';
 import { formatDate, formatCurrency } from '../../../utils/date';
+import { Select } from '../../../components/ui/Select';
+import { useClients } from '../../clients/hooks/useClients';
 
 interface TransactionListProps {
     transactions: Transaction[];
@@ -9,6 +11,12 @@ interface TransactionListProps {
 }
 
 export const TransactionList: React.FC<TransactionListProps> = ({ transactions, isLoading }) => {
+    const { clients, isLoading: isLoadingClients } = useClients();
+    const clientOptions = clients.map(c => ({
+        value: c.id,
+        label: c.name
+    }));
+
     if (isLoading) {
         return (
             <div className="space-y-4">
@@ -31,6 +39,17 @@ export const TransactionList: React.FC<TransactionListProps> = ({ transactions, 
 
     return (
         <div className="space-y-3">
+            {/* Simple Filters */}
+            <div className="flex items-center space-x-2 mb-4">
+                <div className="relative flex-1 max-w-sm">
+                    <Select
+                        label="Cliente"
+                        options={clientOptions}
+                        disabled={isLoadingClients}
+                    />
+                </div>
+
+            </div>
             {transactions.map((transaction) => (
                 <div
                     key={transaction.id}

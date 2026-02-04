@@ -53,21 +53,6 @@ export const Dashboard: React.FC = () => {
 
             {/* Main Content Area */}
             <div className="space-y-6">
-                {/* Simple Filters */}
-                <div className="flex items-center space-x-2 mb-4">
-                    <div className="relative flex-1 max-w-sm">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
-                        <input
-                            type="text"
-                            placeholder="Buscar..."
-                            className="w-full pl-10 pr-4 py-2 bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
-                        />
-                    </div>
-                    <Button variant="outline" size="icon">
-                        <Filter size={18} />
-                    </Button>
-                </div>
-
                 {activeSection === 'transactions' && (
                     <TransactionList transactions={transactions} isLoading={isLoadingTransactions} />
                 )}

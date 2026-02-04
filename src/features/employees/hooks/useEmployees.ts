@@ -8,6 +8,7 @@ export const useEmployees = () => {
     const employeesQuery = useQuery({
         queryKey: ['employees'],
         queryFn: employeesApi.getAll,
+        select: (data) => [...data].sort((a, b) => a.name.localeCompare(b.name)),
     });
 
     const createEmployeeMutation = useMutation({
