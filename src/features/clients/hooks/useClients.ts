@@ -8,6 +8,7 @@ export const useClients = () => {
     const clientsQuery = useQuery({
         queryKey: ['clients'],
         queryFn: clientsApi.getAll,
+        select: (data) => [...data].sort((a, b) => a.name.localeCompare(b.name)),
     });
 
     const createClientMutation = useMutation({
