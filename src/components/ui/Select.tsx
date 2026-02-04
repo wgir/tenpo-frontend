@@ -4,11 +4,12 @@ import { cn } from './Button';
 interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
     label?: string;
     error?: string;
+    placeholder?: string;
     options: { value: string | number; label: string }[];
 }
 
 export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
-    ({ className, label, error, options, ...props }, ref) => {
+    ({ className, label, error, options, placeholder, ...props }, ref) => {
         return (
             <div className="w-full space-y-1">
                 {label && (
@@ -25,7 +26,7 @@ export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
                     )}
                     {...props}
                 >
-                    <option value="">Seleccione una opción</option>
+                    {placeholder && <option value="">{placeholder}</option>}
                     {options.map((opt) => (
                         <option key={opt.value} value={opt.value}>
                             {opt.label}
