@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { MainLayout } from '../layouts/MainLayout';
 import { Button } from '../components/ui/Button';
 import { Modal } from '../components/ui/Modal';
-import { Plus, Search, Filter } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import { TransactionList } from '../features/transactions/components/TransactionList';
 import { TransactionForm } from '../features/transactions/components/TransactionForm';
 import { ClientList } from '../features/clients/components/ClientList';
@@ -18,7 +18,7 @@ export const Dashboard: React.FC = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [editingItem, setEditingItem] = useState<any>(null);
 
-    const { transactions, isLoading: isLoadingTransactions, createTransaction } = useTransactions();
+    const { transactions, isLoading: isLoadingTransactions, createTransaction, updateTransaction, deleteTransaction, } = useTransactions();
     const { clients, isLoading: isLoadingClients, createClient, updateClient, deleteClient } = useClients();
     const { employees, isLoading: isLoadingEmployees, createEmployee, updateEmployee, deleteEmployee } = useEmployees();
 
@@ -53,8 +53,13 @@ export const Dashboard: React.FC = () => {
 
             {/* Main Content Area */}
             <div className="space-y-6">
+
+
                 {activeSection === 'transactions' && (
-                    <TransactionList transactions={transactions} isLoading={isLoadingTransactions} />
+                    <TransactionList transactions={transactions}
+                        onEdit={(transaction) => { setEditingItem(transaction); setIsModalOpen(true); }}
+                        onDelete={deleteTransaction}
+                        isLoading={isLoadingTransactions} />
                 )}
 
                 {activeSection === 'clients' && (
@@ -86,7 +91,11 @@ export const Dashboard: React.FC = () => {
                 {activeSection === 'transactions' && (
                     <TransactionForm
                         onSubmit={async (values) => {
-                            await createTransaction(values);
+                            if (editingItem) {
+                                await updateTransaction({ id: editingItem.id, data: values });
+                            } else {
+                                await createTransaction(values);
+                            }
                             setIsModalOpen(false);
                         }}
                     />
