@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Plus } from 'lucide-react';
@@ -14,10 +14,11 @@ import { EmployeeForm } from '../../employees/components/EmployeeForm';
 
 interface TransactionFormProps {
     onSubmit: (values: TransactionFormValues) => Promise<void>;
+    initialValues?: Partial<TransactionFormValues>;
     isLoading?: boolean;
 }
 
-export const TransactionForm: React.FC<TransactionFormProps> = ({ onSubmit, isLoading }) => {
+export const TransactionForm: React.FC<TransactionFormProps> = ({ onSubmit, initialValues, isLoading }) => {
     const { clients, createClient } = useClients();
     const { employees, createEmployee } = useEmployees();
 
@@ -29,13 +30,28 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ onSubmit, isLo
         handleSubmit,
         setValue,
         watch,
+        reset,
         formState: { errors },
     } = useForm<TransactionFormValues>({
         resolver: zodResolver(transactionSchema),
         defaultValues: {
-            date: new Date().toISOString().slice(0, 16),
+            ...initialValues,
+            date: initialValues?.date
+                ? new Date(initialValues.date).toISOString().slice(0, 16)
+                : new Date().toISOString().slice(0, 16),
         },
     });
+
+    useEffect(() => {
+        if (initialValues) {
+            reset({
+                ...initialValues,
+                date: initialValues.date
+                    ? new Date(initialValues.date).toISOString().slice(0, 16)
+                    : new Date().toISOString().slice(0, 16),
+            });
+        }
+    }, [initialValues, reset]);
 
     const selectedClientId = watch('client_id');
 

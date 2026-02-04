@@ -90,6 +90,7 @@ export const Dashboard: React.FC = () => {
             >
                 {activeSection === 'transactions' && (
                     <TransactionForm
+                        initialValues={editingItem}
                         onSubmit={async (values) => {
                             if (editingItem) {
                                 await updateTransaction({ id: editingItem.id, data: values });
