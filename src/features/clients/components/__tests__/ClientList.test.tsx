@@ -1,7 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import { ClientList } from '../ClientList.tsx';
-import type { Client } from '../types/client.types.ts';
+import type { Client } from '../../types/client.types.ts';
 
 const mockClients: Client[] = [
     { id: 1, name: 'Client 1', rut: '11111111-1' },
