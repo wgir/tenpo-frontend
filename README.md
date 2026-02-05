@@ -11,6 +11,7 @@ A modern, high-performance web application built with React 19, Vite, and Tailwi
 - **State Management**: [React Hook Form](https://react-hook-form.com/) + [Zod](https://zod.dev/)
 - **Icons**: [Lucide React](https://lucide.dev/)
 - **API Client**: [Axios](https://axios-http.com/)
+- **Testing**: [Vitest](https://vitest.dev/), [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/) & [MSW](https://mswjs.io/)
 
 ## 🛠️ Getting Started
 
@@ -54,6 +55,19 @@ npm run build
 Locally preview the production build.
 ```bash
 npm run preview
+```
+
+### Running Tests
+We use Vitest and React Testing Library for unit and integration testing.
+
+#### Run all tests (Watch Mode)
+```bash
+npm test
+```
+
+#### Run tests once
+```bash
+npm run test -- --run
 ```
 
 ## 📂 Project Structure
