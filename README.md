@@ -70,6 +70,21 @@ npm test
 npm run test -- --run
 ```
 
+## 🐳 Docker Support
+
+To build and run the application using Docker:
+
+### Build the Image
+```bash
+docker build -t tenpo-frontend .
+```
+
+### Run the Container
+```bash
+docker run -p 5173:80 tenpo-frontend
+```
+Open [http://localhost:5173](http://localhost:5173) in your browser.
+
 ## 📂 Project Structure
 
 - `src/api`: Centralized API configuration and Axios instance.
